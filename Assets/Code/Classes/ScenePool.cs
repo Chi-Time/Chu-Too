@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-//TODO: Remove scene ref from each pad and consider just replacing at position when scene ends.
+//TODO: Spend time documenting codebase.
+
 [System.Serializable]
 public class ScenePool : MonoBehaviour
 {
@@ -71,7 +72,7 @@ public class ScenePool : MonoBehaviour
                 ObjectsInScene.Add (objects[i]);
     }
 
-    /// <summary>Sorts the current pad back into the correct pad pool.</summary>
+    /// <summary>Sorts the current pad back into the correct pad pool. Defaulting it's state.</summary>
     /// <param name="pad">The pad to return.</param>
     public void ReturnToPool (DirectionPad pad)
     {
@@ -89,11 +90,15 @@ public class ScenePool : MonoBehaviour
             LeftPads.Add (pad);
     }
 
+    /// <summary>Retrieves an inactive pad from the pool and returns it activated for use.</summary>
+    /// <param name="pads"></param>
+    /// <param name="position"></param>
     public DirectionPad GetInactivePad (List<DirectionPad> pads, Vector3 position)
     {
         for(int i = 0; i < pads.Count; i++)
         {
-            // If the current pad is inactive.
+            // If the current pad is inactive:
+            // then get it from the pool, make it active and add it to our active pads.
             if(pads[i].gameObject.activeSelf == false)
             {
                 var pad = pads[i];
