@@ -5,12 +5,12 @@ using System.Collections.Generic;
 public class ScenePool : MonoBehaviour
 {
     #region Variables
-    public List<DirectionPad> _UpPads = new List<DirectionPad> ();
-    public List<DirectionPad> _DownPads = new List<DirectionPad> ();
-    public List<DirectionPad> _LeftPads = new List<DirectionPad> ();
-    public List<DirectionPad> _RightPads = new List<DirectionPad> ();
-    public List<DirectionPad> _ActivePads = new List<DirectionPad> ();
-    public List<GameObject> _ObjectsInScene = new List<GameObject> ();
+    public List<DirectionPad> UpPads = new List<DirectionPad> ();
+    public List<DirectionPad> DownPads = new List<DirectionPad> ();
+    public List<DirectionPad> LeftPads = new List<DirectionPad> ();
+    public List<DirectionPad> RightPads = new List<DirectionPad> ();
+    public List<DirectionPad> ActivePads = new List<DirectionPad> ();
+    public List<GameObject> ObjectsInScene = new List<GameObject> ();
 
     [Header ("Attributes")]
     [Tooltip("The number of up pads the player can have this stage.")]
@@ -32,14 +32,15 @@ public class ScenePool : MonoBehaviour
     public void Awake ()
     {
         GeneratePads ();
+        GenerateSceneObjects ();
     }
 
     private void GeneratePads ()
     {
-        GeneratePadPool (_UpPad.gameObject, _UpPads, _UpPadCount);
-        GeneratePadPool (_DownPad.gameObject, _DownPads, _DownPadCount);
-        GeneratePadPool (_LeftPad.gameObject, _LeftPads, _LeftPadCount);
-        GeneratePadPool (_RightPad.gameObject, _RightPads, _RightPadCount);
+        GeneratePadPool (_UpPad.gameObject, UpPads, _UpPadCount);
+        GeneratePadPool (_DownPad.gameObject, DownPads, _DownPadCount);
+        GeneratePadPool (_LeftPad.gameObject, LeftPads, _LeftPadCount);
+        GeneratePadPool (_RightPad.gameObject, RightPads, _RightPadCount);
     }
 
     private void GeneratePadPool (GameObject padPrefab, List<DirectionPad> padPool, int amount)
@@ -52,22 +53,35 @@ public class ScenePool : MonoBehaviour
         }
     }
 
+    private void GenerateSceneObjects ()
+    {
+        AddToScenePool (GameObject.FindGameObjectsWithTag ("Teleport"));
+        AddToScenePool (GameObject.FindGameObjectsWithTag ("Rocket"));
+    }
+
+    private void AddToScenePool (GameObject[] objects)
+    {
+        if(objects != null)
+            for(int i = 0; i < objects.Length; i++)
+                ObjectsInScene.Add (objects[i]);
+    }
+
     /// <summary>Sorts the current pad back into the correct pad pool.</summary>
     /// <param name="pad">The pad to return.</param>
     public void ReturnToPool (DirectionPad pad)
     {
-        _ActivePads.Remove (pad);
+        ActivePads.Remove (pad);
         pad.gameObject.SetActive (false);
         pad.transform.position = Vector2.zero;
 
         if (pad.CurrentDirection == Vector2.up)
-            _UpPads.Add (pad);
+            UpPads.Add (pad);
         else if (pad.CurrentDirection == Vector2.down)
-            _DownPads.Add (pad);
+            DownPads.Add (pad);
         else if (pad.CurrentDirection == Vector2.right)
-            _RightPads.Add (pad);
+            RightPads.Add (pad);
         else if (pad.CurrentDirection == Vector2.left)
-            _LeftPads.Add (pad);
+            LeftPads.Add (pad);
     }
 
     public DirectionPad GetInactivePad (List<DirectionPad> pads, Vector3 position)
@@ -79,7 +93,7 @@ public class ScenePool : MonoBehaviour
             {
                 var pad = pads[i];
                 pads.Remove (pad);
-                _ActivePads.Add (pad);
+                ActivePads.Add (pad);
                 pad.gameObject.SetActive (true);
 
                 return pad;
@@ -88,7 +102,5 @@ public class ScenePool : MonoBehaviour
 
         return null;
     }
-
-
     #endregion
 }
