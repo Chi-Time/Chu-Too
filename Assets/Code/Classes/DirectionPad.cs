@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//TODO: Return self to correct pool upon being eaten.
+//TODO: Store current position of pad when placed, then when scene restarts, replace pad there if eaten.
 public class DirectionPad : MonoBehaviour
 {
     public Vector2 CurrentDirection { get; private set; }
@@ -38,7 +38,7 @@ public class DirectionPad : MonoBehaviour
         _Uses--;
 
         if (_Uses <= 0)
-            Destroy (this.gameObject);
+            this.gameObject.SetActive (false);
         else
             ShrinkPad ();
     }
