@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+//TODO: Remove scene ref from each pad and consider just replacing at position when scene ends.
 [System.Serializable]
 public class ScenePool : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class ScenePool : MonoBehaviour
     {
         GeneratePads ();
         GenerateSceneObjects ();
+
+        EventManager.OnStageStarted += StageStarted;
     }
 
     private void GeneratePads ()
@@ -45,11 +48,13 @@ public class ScenePool : MonoBehaviour
 
     private void GeneratePadPool (GameObject padPrefab, List<DirectionPad> padPool, int amount)
     {
+        // Create a pad, default it, get the component and then add it to it's pool.
         for(int i = 0; i < amount; i++)
         {
-            var pad = Instantiate<GameObject> (padPrefab, Vector2.zero, Quaternion.identity);
-            padPool.Add (pad.GetComponent<DirectionPad> ());
-            pad.SetActive (false);
+            var padGO = Instantiate<GameObject> (padPrefab, Vector2.zero, Quaternion.identity);
+            var pad = padGO.GetComponent<DirectionPad> ();
+            padGO.SetActive (false);
+            padPool.Add (pad);
         }
     }
 
@@ -101,6 +106,19 @@ public class ScenePool : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void StageStarted (bool hasStarted)
+    {
+        // If the stage is reset, return each pad back to being active.
+        if(!hasStarted)
+            for (int i = 0; i < ActivePads.Count; i++)
+                ActivePads[i].gameObject.SetActive (true);
+    }
+
+    private void OnDestroy ()
+    {
+        EventManager.OnStageStarted -= StageStarted;
     }
     #endregion
 }
