@@ -3,6 +3,7 @@ using System.Collections;
 
 //TODO: Consider using gridmove script for mouse and cat movement.
 //TODO: Fix janky turn at move pads.
+//TODO: Refactor avatar class as it's unwieldy, can be split into subsections for movement etc.
 
 [RequireComponent(typeof (Collider2D), typeof (Rigidbody2D))]
 public abstract class Avatar : MonoBehaviour
