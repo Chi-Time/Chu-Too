@@ -66,7 +66,7 @@ public abstract class Avatar : MonoBehaviour
         _CurrentDir = dir;
 
         SetRotation ();
-        StartCoroutine (Move (dir, MoveSpeed));
+        StartCoroutine (Move (dir));
     }
 
     protected void SetRotation ()
@@ -98,14 +98,14 @@ public abstract class Avatar : MonoBehaviour
         StopAllCoroutines ();
     }
 
-    protected IEnumerator Move (Vector2 position, float time)
+    protected IEnumerator Move (Vector2 position)
     {
         var elapsedTime = 0.0f;
         var startPos = _Rigidbody2D.position;
 
-        while (elapsedTime < time)
+        while (elapsedTime < MoveSpeed)
         {
-            _Rigidbody2D.MovePosition (Vector2.Lerp (startPos, startPos + position, (elapsedTime / time)));
+            _Rigidbody2D.MovePosition (Vector2.Lerp (startPos, startPos + position, (elapsedTime / MoveSpeed)));
             elapsedTime += Time.fixedDeltaTime;
             yield return new WaitForEndOfFrame ();
         }
@@ -113,7 +113,7 @@ public abstract class Avatar : MonoBehaviour
         _Rigidbody2D.position = new Vector3 (Mathf.Round (_Rigidbody2D.position.x), Mathf.Round (_Rigidbody2D.position.y), 0.0f);
 
         StopAllCoroutines ();
-        StartCoroutine (Move (_CurrentDir, MoveSpeed));
+        StartCoroutine (Move (_CurrentDir));
     }
 
     /// <summary>Check ahead of the mouse ensuring that no wall is in the way.</summary>
