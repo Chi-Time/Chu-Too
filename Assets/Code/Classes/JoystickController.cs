@@ -40,7 +40,7 @@ public class JoystickController : MonoBehaviour
     /// <param name="pads">The pad list to place a pad from.</param>
     private void PlacePad (List<DirectionPad> pads)
     {
-        // Ensure there is no pad in the current position.
+        // Ensure there is no pad, or object in the current position.
         // If there isn't. Place one down and add it to the active objects pool.
         if (!PadAlreadyInPosition () && pads.Count > 0 && !SceneObjectInPosition ())
         {
@@ -61,6 +61,7 @@ public class JoystickController : MonoBehaviour
             {
                 if (_ScenePool.ActivePads[i].transform.position == GetRoundedPosition ())
                 {
+                    // Remove the current pad and then return that something was found.
                     _ScenePool.ReturnToPool (_ScenePool.ActivePads[i]);
                     return true;
                 }
@@ -70,6 +71,7 @@ public class JoystickController : MonoBehaviour
         return false;
     }
 
+    /// <summary>Checks the current cursor position for any scene objects such as pits or rockets. Returns true if found.</summary>
     private bool SceneObjectInPosition ()
     {
         for(int i = 0; i < _ScenePool.ObjectsInScene.Count; i++)
