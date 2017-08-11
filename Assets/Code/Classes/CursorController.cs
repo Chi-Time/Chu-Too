@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//TODO: Fix so that cursor always starts at zero every time match restarts.
-
 [System.Serializable]
 public class CursorController
 {
+    public bool _IsMoving = false;
+
     private enum Orientation { Horizontal, Vertical };
 
     [SerializeField] private float _GridSize = 1f;
@@ -17,7 +17,6 @@ public class CursorController
     [SerializeField] private Orientation _CurrentGridOrientation = Orientation.Vertical;
 
     private Vector2 _Input = Vector2.zero;
-    private bool _IsMoving = false;
     private Transform _Transform = null;
     private MonoBehaviour _Behaviour = null;
 
