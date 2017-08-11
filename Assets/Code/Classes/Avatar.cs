@@ -12,7 +12,6 @@ public abstract class Avatar : MonoBehaviour
     [SerializeField] public Directions InitialDirection = Directions.Up;
     [SerializeField] protected LayerMask _Walls;
 
-    private bool _HasStarted = false;
     protected Vector2 _CurrentDir = Vector2.zero;
     protected Transform _Transform = null;
     protected Rigidbody2D _Rigidbody2D = null;
@@ -44,8 +43,6 @@ public abstract class Avatar : MonoBehaviour
 
     protected void SetInitialDirection ()
     {
-        _HasStarted = true;
-
         switch(InitialDirection)
         {
             case Directions.Up:
@@ -86,15 +83,6 @@ public abstract class Avatar : MonoBehaviour
     protected void Update ()
     {
         CheckAhead ();
-
-        //if (LevelController.HasStarted == true && !_HasStarted)
-        //    SetInitialDirection ();
-        //else if (LevelController.HasStarted == false)
-        //{
-        //    _HasStarted = false;
-        //    StopAllCoroutines ();
-        //    SetDirection (Vector2.zero);
-        //}
     }
 
     protected void StageStarted (bool hasStarted)
