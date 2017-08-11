@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-//TODO: Fix so that eaten tiles are returned to their respective pool. Do this with global pool manager.
 public class JoystickController : MonoBehaviour
 {
     [SerializeField] private CursorController _Cursor = new CursorController ();
