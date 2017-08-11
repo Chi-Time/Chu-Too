@@ -5,7 +5,6 @@ using System.Collections.Generic;
 //TODO: Fix so that eaten tiles are returned to their respective pool. Do this with global pool manager.
 public class JoystickController : MonoBehaviour
 {
-    [Header("Movement")]
     [SerializeField] private CursorController _Cursor = new CursorController ();
 
     private ScenePool _ScenePool = null;
@@ -95,6 +94,9 @@ public class JoystickController : MonoBehaviour
 
     private void StageStarted (bool hasStarted)
     {
+        transform.position = GetRoundedPosition ();
+        _Cursor._IsMoving = false;
+
         if (hasStarted)
             this.gameObject.SetActive (false);
         else
