@@ -21,7 +21,6 @@ public class LevelController : MonoBehaviour
 
     private void Update ()
     {
-        //TODO: Add speed up button.
         if (Input.GetButtonDown ("Submit") && !HasStarted && !_LevelComplete)
         {
             HasStarted = true;
@@ -39,6 +38,7 @@ public class LevelController : MonoBehaviour
             return;
         }
 
+        //TODO: Fix Speed up as currently adds different in motion between cat and mouse.
         if (Input.GetButtonDown ("Speed Up"))
             GetComponent<AvatarController> ().SetSpeed (true);
         else if (Input.GetButtonUp ("Speed Up"))
