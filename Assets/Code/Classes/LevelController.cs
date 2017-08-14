@@ -8,6 +8,12 @@ public class LevelController : MonoBehaviour
     [SerializeField] private int _MiceToCollect = 0;
 
     private bool _LevelComplete = false;
+    private int _CachedMiceToCollect = 0;
+
+    private void Awake ()
+    {
+        EventManager.OnStageStarted += StageStarted;
+    }
 
     private void Start ()
     {
@@ -17,6 +23,7 @@ public class LevelController : MonoBehaviour
     private void SetDefaults ()
     {
         _MiceToCollect = GameObject.FindGameObjectsWithTag ("Mouse").Length;
+        _CachedMiceToCollect = _MiceToCollect;
     }
 
     private void Update ()
@@ -58,5 +65,18 @@ public class LevelController : MonoBehaviour
         print ("Level Complete");
         Time.timeScale = 0.0f;
         _LevelComplete = true;
+    }
+
+    private void StageStarted (bool hasStarted)
+    {
+        // Reset the number of mice to collect as stage is reset.
+        // This stops player from scoring 3 mice, stopping, then scoring more.
+        if (!hasStarted)
+            _MiceToCollect = _CachedMiceToCollect;
+    }
+
+    private void OnDestroy ()
+    {
+        EventManager.OnStageStarted -= StageStarted;
     }
 }
