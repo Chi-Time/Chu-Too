@@ -13,6 +13,7 @@ public abstract class Avatar : MonoBehaviour
     [SerializeField] public Directions InitialDirection = Directions.Up;
     [SerializeField] protected LayerMask _Walls;
 
+    protected bool _HasStarted = false;
     protected Vector2 _CurrentDir = Vector2.zero;
     protected Transform _Transform = null;
     protected Rigidbody2D _Rigidbody2D = null;
@@ -88,12 +89,17 @@ public abstract class Avatar : MonoBehaviour
 
     protected void StageStarted (bool hasStarted)
     {
-        if (hasStarted)
-        {
-            SetInitialDirection ();
-            return;
-        }
+        _HasStarted = hasStarted;
 
+        if (hasStarted)
+            SetInitialDirection ();
+        else
+            ResetAvatar ();
+    }
+
+    protected void ResetAvatar ()
+    {
+        this.gameObject.SetActive (true);
         SetDirection (Vector2.zero);
         StopAllCoroutines ();
     }
@@ -201,9 +207,15 @@ public abstract class Avatar : MonoBehaviour
     //        HitPad (other);
     //}
 
-    private void OnTriggerEnter2D (Collider2D other)
+    //private void OnTriggerEnter2D (Collider2D other)
+    //{
+    //    if (other.CompareTag ("Pad") && _HasStarted)
+    //        HitPad (other);
+    //}
+
+    private void OnTriggerStay2D (Collider2D other)
     {
-        if (other.CompareTag ("Pad"))
+        if (other.CompareTag ("Pad") && _HasStarted)
             HitPad (other);
     }
 
