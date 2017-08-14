@@ -18,6 +18,8 @@ public class DirectionPad : MonoBehaviour
         
         SetDefaults ();
         SetDirection ();
+
+        EventManager.OnStageStarted += StageStarted;
     }
 
     private void SetDefaults ()
@@ -64,5 +66,23 @@ public class DirectionPad : MonoBehaviour
         );
 
         _BoxCollider.size = _Size;
+    }
+
+    private void StageStarted (bool hasStarted)
+    {
+        if (!hasStarted)
+            ResetPad ();
+    }
+
+    private void ResetPad ()
+    {
+        transform.localScale = Vector3.one;
+        _BoxCollider.size = _Size;
+        _Uses = 3;
+    }
+
+    private void OnDestroy ()
+    {
+        EventManager.OnStageStarted -= StageStarted;
     }
 }
